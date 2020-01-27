@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Context>
+
+
+    <Resource name="jdbc/usersads"
+              auth="Container" type="javax.sql.DataSource"
+              maxActive="25" maxIdle="10" maxWait="10000"
+              maxTotal="50" removeAbandonedTimeout="300"
+              defaultAutoCommit="true"
+              factory="org.apache.tomcat.jdbc.pool.DataSourceFactory"
+              username="user" password="user_user"
+              driverClassName="com.mysql.jdbc.Driver"
+              url="jdbc:mysql://127.0.0.1:3306/usersads?useUnicode=true&amp;serverTimezone=UTC">
+
+    </Resource>
+
+
+
+</Context>
