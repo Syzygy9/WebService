@@ -1,4 +1,4 @@
-package ru.webclassfields.business;
+package ru.webclassfields.service;
 
 import ru.webclassfields.dao.AdvertisementDAO;
 import ru.webclassfields.dao.impl.AdvertisementDAOImpl;

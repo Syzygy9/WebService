@@ -7,7 +7,7 @@ public class StatusMessage {
     private Integer status;
     private String message;
 
-    public StatusMessage()  {
+    public StatusMessage() {
     }
 
     @JsonProperty(value = "status_code")

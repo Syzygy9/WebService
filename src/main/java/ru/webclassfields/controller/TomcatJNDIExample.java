@@ -1,4 +1,4 @@
-package ru.webclassfields.service;
+package ru.webclassfields.controller;
 
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.JsonGenerationException;
@@ -89,4 +89,3 @@ public class TomcatJNDIExample {
     }
 
 }
-
