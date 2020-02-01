@@ -1,5 +1,8 @@
 package ru.webclassfields.controller;
 
+import ru.webclassfields.dao.UserDAO;
+import ru.webclassfields.dao.impl.UserDAOImpl;
+import ru.webclassfields.model.User;
 import ru.webclassfields.service.AdvertisementBusiness;
 import ru.webclassfields.model.Advertisement;
 
@@ -29,12 +32,20 @@ public class AdvertisementController {
     }
 
     @POST
-    @Path("/create/{user_id}")
+    @Path("/create/{email}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)
-    public Response createAdvertisement(@PathParam("user_id") Long userId, Advertisement advertisement) {
-        return Response.status(200).entity("Advertisement with id: " + advertisement.getAdId() + " and user id " +
-                userId+ " was created").build();
+    public Response createAdvertisement(@PathParam("email") String email, Advertisement advertisement) {
+
+        UserDAO userDAO =  new UserDAOImpl();
+
+        User user = userDAO.getIdUserByEmail(email);
+
+        AdvertisementBusiness advertisementBusiness = new AdvertisementBusiness();
+        Long adsId = advertisementBusiness.createAdvertisement(user, advertisement);
+
+        return Response.status(200).entity("Advertisement with id: " + adsId + " для user id " +
+                user.getUserId() + " was created").build();
     }
 
     @PUT

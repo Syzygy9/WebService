@@ -3,10 +3,14 @@ package ru.webclassfields.dao.impl;
 import org.apache.log4j.Logger;
 import ru.webclassfields.dao.AdvertisementDAO;
 import ru.webclassfields.model.Advertisement;
+import ru.webclassfields.model.User;
 import ru.webclassfields.util.DataBase;
 
 import javax.sql.DataSource;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -15,19 +19,58 @@ public class AdvertisementDAOImpl implements AdvertisementDAO {
     private static final DataSource DATA_SOURCE = DataBase.getDataSource();
     private static final Logger LOG = Logger.getLogger(AdvertisementDAOImpl.class);
 
+    private static AdvertisementDAO advertisementDAO = new AdvertisementDAOImpl();
+
     private Connection connection;
 
-    public AdvertisementDAOImpl() {
+    private AdvertisementDAOImpl() {
     }
+
+    public static AdvertisementDAO getInstance() {
+        return advertisementDAO;
+    }
+
 
     public AdvertisementDAOImpl(Connection conn) {
         this.connection = conn;
     }
 
     @Override
-    public void createAdvertisement() {
+    public Long createAdvertisement(User user, Advertisement advertisement) {
 
+        try {
+            this.connection = DATA_SOURCE.getConnection();
+
+
+            String sql = "insert into  admnts (ad_id, category, head, body, phone, date, user_id) " +
+                    "values(?,?,?,?,?,?,?)";
+            PreparedStatement preparedStatement = this.connection.prepareStatement(sql);
+
+            preparedStatement.setLong(1, advertisement.getAdId());
+            preparedStatement.setInt(2, advertisement.getCategory());
+            preparedStatement.setString(3, advertisement.getHead());
+            preparedStatement.setString(4, advertisement.getBody());
+            preparedStatement.setString(5, advertisement.getPhone());
+            preparedStatement.setLong(6, advertisement.getDate());
+            preparedStatement.setLong(7, user.getUserId());
+
+            int row = preparedStatement.executeUpdate();
+            LOG.info("AdvertisementDAOImpl::createAdvertisement. inserted number" + row + " with id " + advertisement.getAdId() + "into admnts");
+
+            return advertisement.getAdId();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (this.connection != null) {
+                try {
+                    this.connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
+
 
     @Override
     public Advertisement getAdvertidementById(Long adId) {
@@ -58,6 +101,14 @@ public class AdvertisementDAOImpl implements AdvertisementDAO {
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } finally {
+            try {
+                if (this.connection != null) {
+                    this.connection.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
 
     }
@@ -98,7 +149,7 @@ public class AdvertisementDAOImpl implements AdvertisementDAO {
 
     public Connection getConnectionOrThrowException() {
         try {
-            return  DATA_SOURCE.getConnection();
+            return DATA_SOURCE.getConnection();
         } catch (SQLException e) {
             String msg = "Error at AdvertisementDAOImpl::getConnectionOrThrowException:  " + e.getMessage();
             LOG.error(msg, e);
@@ -107,11 +158,10 @@ public class AdvertisementDAOImpl implements AdvertisementDAO {
     }
 
 
-
-    public void closeConnection () {
+    public void closeConnection() {
 
         try {
-            if(this.connection != null) {
+            if (this.connection != null) {
                 this.connection.close();
             }
         } catch (SQLException e) {
@@ -125,9 +175,6 @@ public class AdvertisementDAOImpl implements AdvertisementDAO {
     public Long deleteAdvertisementById(Long adId) {
         return null;
     }
-
-
-
 
 
 

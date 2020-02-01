@@ -1,6 +1,7 @@
 package ru.webclassfields.dao;
 
 import ru.webclassfields.model.Advertisement;
+import ru.webclassfields.model.User;
 
 import java.sql.Connection;
 import java.util.List;
@@ -10,7 +11,7 @@ public interface AdvertisementDAO {
 
     void closeConnection ();
 
-    void createAdvertisement();
+    Long createAdvertisement(User user, Advertisement advertisement);
 
     Advertisement getAdvertidementById(Long adId);
 
