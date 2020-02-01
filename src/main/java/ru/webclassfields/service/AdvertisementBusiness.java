@@ -23,6 +23,7 @@ public class AdvertisementBusiness {
 
     public Long createAdvertisement(User user, Advertisement advertisement) {
         return advertisementDAO.createAdvertisement(user, advertisement);
+
     }
 
 }
