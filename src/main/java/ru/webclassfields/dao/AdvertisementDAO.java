@@ -17,7 +17,7 @@ public interface AdvertisementDAO {
 
     List<Advertisement> listAll();
 
-    Long deleteAdvertisementById(Long adId);
+    Integer deleteAdvertisementById(Long userID, Long adId);
 
 }
 

@@ -35,6 +35,7 @@ public class AdvertisementDAOImpl implements AdvertisementDAO {
         this.connection = conn;
     }
 
+
     @Override
     public Long createAdvertisement(User user, Advertisement advertisement) {
 
@@ -172,8 +173,36 @@ public class AdvertisementDAOImpl implements AdvertisementDAO {
     }
 
     @Override
-    public Long deleteAdvertisementById(Long adId) {
-        return null;
+    public Integer deleteAdvertisementById(Long userID, Long adId) {
+
+        try {
+            this.connection = DATA_SOURCE.getConnection();
+
+
+            String sql = "delete from admnts WHERE user_id=? and ad_id=?";
+            PreparedStatement preparedStatement = this.connection.prepareStatement(sql);
+
+            preparedStatement.setLong(1, userID);
+            preparedStatement.setLong(2, adId);
+
+
+            int row = preparedStatement.executeUpdate();
+            LOG.info("AdvertisementDAOImpl::createAdvertisement. deleted rows " + row + " with userId " + (userID) + " and with adID from admnts") ;
+
+            return row;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (this.connection != null) {
+                try {
+                    this.connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+
     }
 
 

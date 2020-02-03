@@ -24,10 +24,9 @@ public class AdvertisementController {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAdvertisement(@PathParam("ad_id") Long id) {
 
-        AdvertisementBusiness advertisementBusiness = new AdvertisementBusiness ();
-        Advertisement advertisement = advertisementBusiness.getAdvertidementById(id);
+        AdvertisementBusiness advertisementBusiness = AdvertisementBusiness.getInstance();
+        Advertisement advertisement = advertisementBusiness.getAdvertisementById(id);
         return Response.status(200).entity(advertisement).build();
-
 
     }
 
@@ -38,10 +37,9 @@ public class AdvertisementController {
     public Response createAdvertisement(@PathParam("email") String email, Advertisement advertisement) {
 
         UserDAO userDAO =  new UserDAOImpl();
-
         User user = userDAO.getIdUserByEmail(email);
 
-        AdvertisementBusiness advertisementBusiness = new AdvertisementBusiness();
+        AdvertisementBusiness advertisementBusiness = AdvertisementBusiness.getInstance();
         Long adsId = advertisementBusiness.createAdvertisement(user, advertisement);
 
         return Response.status(200).entity("Advertisement with id: " + adsId + " для user id " +
@@ -55,6 +53,22 @@ public class AdvertisementController {
                                         @PathParam("user_id") Long userId,
                                         Advertisement advertisement) {
         return Response.status(200).entity(advertisement).build();
+    }
+
+
+    @DELETE
+    @Path("/{ad_id}/{e_mail}")
+    @Produces(MediaType.TEXT_PLAIN)
+        public Response deleteAdvertisementByID (@PathParam("ad_id") Long adId,
+                                                 @PathParam("e_mail") String email) {
+
+        UserDAO userDAO =  new UserDAOImpl();
+        User user = userDAO.getIdUserByEmail(email);
+
+        AdvertisementBusiness advertisementBusiness = AdvertisementBusiness.getInstance();
+        int detetedRows = advertisementBusiness.deleteAdvertisementById(user.getUserId(), adId);
+        return Response.status(200).entity(detetedRows + " of advertisements were deleted").build();
+
     }
 
 }

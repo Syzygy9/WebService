@@ -7,7 +7,21 @@ import ru.webclassfields.model.User;
 
 public class AdvertisementBusiness {
     private AdvertisementDAO advertisementDAO = AdvertisementDAOImpl.getInstance();
-    public Advertisement getAdvertidementById(Long adId) {
+
+
+    private static AdvertisementBusiness advertisementBusiness = new AdvertisementBusiness();
+
+    public static AdvertisementBusiness getInstance() {
+        return advertisementBusiness;
+    }
+
+
+    private AdvertisementBusiness () {
+
+    }
+
+
+    public Advertisement getAdvertisementById(Long adId) {
 
         try {
             advertisementDAO.getConnectionOrThrowException();
@@ -23,7 +37,11 @@ public class AdvertisementBusiness {
 
     public Long createAdvertisement(User user, Advertisement advertisement) {
         return advertisementDAO.createAdvertisement(user, advertisement);
+    }
 
+    public int deleteAdvertisementById(Long userID, Long adId ) {
+
+        return advertisementDAO.deleteAdvertisementById(userID, adId);
     }
 
 }
