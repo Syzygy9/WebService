@@ -19,6 +19,7 @@ public interface AdvertisementDAO {
 
     Integer deleteAdvertisementById(Long userID, Long adId);
 
+    void update(User user, Advertisement advertisement);
 }
 
 

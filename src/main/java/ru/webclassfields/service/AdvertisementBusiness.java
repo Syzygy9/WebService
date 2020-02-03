@@ -44,4 +44,7 @@ public class AdvertisementBusiness {
         return advertisementDAO.deleteAdvertisementById(userID, adId);
     }
 
+    public void changeAdvertisement(User user, Advertisement advertisement) {
+        advertisementDAO.update(user, advertisement);
+    }
 }

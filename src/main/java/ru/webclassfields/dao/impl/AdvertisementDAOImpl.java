@@ -187,7 +187,7 @@ public class AdvertisementDAOImpl implements AdvertisementDAO {
 
 
             int row = preparedStatement.executeUpdate();
-            LOG.info("AdvertisementDAOImpl::createAdvertisement. deleted rows " + row + " with userId " + (userID) + " and with adID from admnts") ;
+            LOG.info("AdvertisementDAOImpl::createAdvertisement. deleted rows " + row + " with userId " + (userID) + " and with adID from admnts");
 
             return row;
         } catch (SQLException e) {
@@ -205,7 +205,50 @@ public class AdvertisementDAOImpl implements AdvertisementDAO {
 
     }
 
+    @Override
+    public void update(User user, Advertisement advertisement) {
 
+        try {
+            this.connection = DATA_SOURCE.getConnection();
+
+
+            String sql = "update admnts set "+
+                    "category = ?, " +
+                    "head = ?, " +
+                    "body = ?, " +
+                    "phone = ?, " +
+                    "date = ? " +
+
+
+                    "WHERE user_id = ? and ad_id = ?";
+            PreparedStatement preparedStatement = this.connection.prepareStatement(sql);
+
+            preparedStatement.setInt(1, advertisement.getCategory());
+            preparedStatement.setString(2, advertisement.getHead());
+            preparedStatement.setString(3, advertisement.getBody());
+            preparedStatement.setString(4, advertisement.getPhone());
+            preparedStatement.setLong(5, advertisement.getDate());
+
+
+            preparedStatement.setLong(6, user.getUserId());
+            preparedStatement.setLong(7, advertisement.getAdId());
+
+            int row = preparedStatement.executeUpdate();
+            LOG.info("AdvertisementDAOImpl::createAdvertisement. updated rows" + row + "in admnts");
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (this.connection != null) {
+                try {
+                    this.connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+    }
 
 
 }

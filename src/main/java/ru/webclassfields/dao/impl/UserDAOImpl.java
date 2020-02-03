@@ -53,6 +53,10 @@ public class UserDAOImpl implements UserDAO {
 
             }//while
 
+
+            if (users.isEmpty()) {
+                throw new RuntimeException("Error at UserDAOImpl::getIdUserByEmail. No user found with email: " + email);
+            }
             return users.get(0);
 
         } catch (SQLException e) {

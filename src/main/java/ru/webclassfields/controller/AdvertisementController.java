@@ -47,13 +47,22 @@ public class AdvertisementController {
     }
 
     @PUT
-    @Path("/change/{ad_id}/{user_id}")
+    @Path("/change/{ad_id}/{e_mail}")
     @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.TEXT_PLAIN)
     public Response changeAdvertisement(@PathParam("ad_id") Long adId,
-                                        @PathParam("user_id") Long userId,
-                                        Advertisement advertisement) {
-        return Response.status(200).entity(advertisement).build();
-    }
+                                        @PathParam("e_mail") String email, Advertisement advertisement ) {
+
+        UserDAO userDAO =  new UserDAOImpl();
+        User user = userDAO.getIdUserByEmail(email);
+
+        AdvertisementBusiness advertisementBusiness = AdvertisementBusiness.getInstance();
+        advertisementBusiness.changeAdvertisement(user, advertisement);
+
+        return Response.status(200).build();
+
+
+            }
 
 
     @DELETE
